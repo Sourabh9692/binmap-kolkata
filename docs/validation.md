@@ -15,7 +15,11 @@
 
 ## Infrastructure checks
 
-The local machine has no Docker/PostGIS service. The PostGIS integration test is skipped locally and configured to run against a dedicated GitHub Actions service. Docker Compose execution and a full container build have not been verified locally.
+The [GitHub Actions validation run](https://github.com/Sourabh9692/binmap-kolkata/actions/runs/37883200740) passed against code commit `53e8094`: **28 API/geospatial/PostGIS tests**, **3 browser workflow tests**, and the production frontend build. The PostGIS check confirms generated geometry, SRID, spatial length and GiST index creation.
+
+The local machine has no Docker/PostGIS service, so that one integration test is skipped locally. Docker Compose execution and a full application-container build have not been verified; CI tested the backend against a real PostGIS service.
+
+The running local API was also checked: 425 segments, 15,059.6 m of network, 2 OSM candidates, 0 reviewed coverage and 0 verified observations. All 1,243 accessibility samples remain unknown.
 
 ## Remaining uncertainties
 
