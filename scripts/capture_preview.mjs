@@ -1,0 +1,13 @@
+import {chromium} from '../frontend/node_modules/@playwright/test/index.mjs';
+const browser=await chromium.launch({channel:'chrome',headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:1080},deviceScaleFactor:1});
+await page.goto('http://127.0.0.1:8000');
+await page.getByText(/survey segments/).first().waitFor();
+await page.locator('.map-shell[data-ready="true"]').waitFor();
+await page.waitForTimeout(1000);
+await page.screenshot({path:'docs/preview-desktop.png',fullPage:true});
+await page.setViewportSize({width:390,height:844});
+await page.waitForTimeout(500);
+await page.screenshot({path:'docs/preview-mobile.png',fullPage:true});
+console.log(JSON.stringify({title:await page.title(),horizontalOverflow:await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)}));
+await browser.close();

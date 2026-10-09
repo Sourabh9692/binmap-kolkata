@@ -1,0 +1,10 @@
+import {chromium} from '../frontend/node_modules/@playwright/test/index.mjs';
+const browser=await chromium.launch({channel:'chrome',headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:1080}});
+page.on('console',m=>console.log(m.type(),m.text().slice(0,1200)));
+page.on('pageerror',e=>console.log('pageerror',e.message));
+page.on('requestfailed',r=>console.log('requestfailed',r.url().slice(0,150),r.failure()));
+await page.goto('http://127.0.0.1:8000');await page.waitForTimeout(10000);
+console.log(await page.evaluate(()=>[...document.querySelectorAll('.map,.maplibregl-canvas,.maplibregl-canvas-container')].map(e=>({class:e.className,width:e.getBoundingClientRect().width,height:e.getBoundingClientRect().height,style:e.getAttribute('style'),attrWidth:e.getAttribute('width'),attrHeight:e.getAttribute('height')}))));
+await page.screenshot({path:'docs/preview-desktop.png',fullPage:true});
+await browser.close();

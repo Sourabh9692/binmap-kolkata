@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgis/postgis:17-3.5
+    environment:
+      POSTGRES_DB: binmap
+      POSTGRES_USER: binmap
+      POSTGRES_PASSWORD: ${BINMAP_DB_PASSWORD:?Set a unique BINMAP_DB_PASSWORD in .env}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U binmap -d binmap']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  app:
+    build: .
+    ports: ['127.0.0.1:8000:8000']
+    environment:
+      BINMAP_DATABASE_URL: postgresql+psycopg://binmap:${BINMAP_DB_PASSWORD}@db:5432/binmap
+      BINMAP_SURVEY_KEY: ${BINMAP_SURVEY_KEY:?Generate local keys first}
+      BINMAP_REVIEW_KEY: ${BINMAP_REVIEW_KEY:?Generate local keys first}
+    volumes:
+      - appdata:/app/data
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  postgres:
+  appdata:

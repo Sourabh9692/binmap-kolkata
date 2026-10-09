@@ -1,0 +1,45 @@
+name: Verify BinMap
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_USER: binmap
+          POSTGRES_PASSWORD: ci-test-only
+          POSTGRES_DB: binmap_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd 'pg_isready -U binmap -d binmap_test'
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install Python packages
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install -r requirements.txt
+      - name: API and graph tests
+        env:
+          BINMAP_TEST_POSTGRES_URL: postgresql+psycopg://binmap:ci-test-only@localhost:5432/binmap_test
+        run: .venv/bin/python -m pytest -q
+      - name: Build frontend
+        working-directory: frontend
+        run: npm ci && npm run build
+      - name: Install test browser
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
+      - name: Offline survey and review browser tests
+        working-directory: frontend
+        run: npm test
