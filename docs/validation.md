@@ -10,6 +10,7 @@
 - User-selected pin: **22.4909012, 88.3677315**. Along-network limit: 500 m. Anchor-to-edge offset: approximately 5.3 m.
 - Generated **425 unique valid segments**, totaling **15,059.60 m**, each ≤100 m. All geometry lies within the necessary 500 m straight-line upper bound. This is a geometric sanity check, not a claim of independently verified walkability.
 - Re-import created **0** additional records, confirming idempotent import for this snapshot.
+- Accessibility export produced **1,243 samples**, all correctly `unknown` with no verified field inventory.
 - **2 OSM candidates** in the surrounding extract; **0 real field observations** and **0 reviewed coverage**. Candidate counts do not establish bin absence or physical asset totals.
 
 ## Infrastructure checks

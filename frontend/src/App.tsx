@@ -435,8 +435,7 @@ export default function App() {
                   <span className="eyebrow">NEXT IN THE FIELD</span>
                   <h2>
                     Your first survey
-                    <br />
-                    starts here.
+                    <br /> starts here.
                   </h2>
                   <p>
                     No field results have been assumed. Bring the neighborhood

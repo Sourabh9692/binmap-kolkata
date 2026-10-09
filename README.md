@@ -110,7 +110,7 @@ The tool records the dataset hash and rejects overlapping or near-boundary match
 
 ## PostgreSQL/PostGIS
 
-Docker Compose requires Docker, which was not installed on the initial Mac. Add a unique, URL-safe `BINMAP_DB_PASSWORD` to `.env`, then:
+Docker Compose requires Docker, which was not installed on the initial Mac. The PostGIS image is amd64; Compose requests that platform so Apple Silicon uses Docker’s emulation. Add a unique, URL-safe `BINMAP_DB_PASSWORD` to `.env`, then:
 
 ```sh
 docker compose up --build -d
