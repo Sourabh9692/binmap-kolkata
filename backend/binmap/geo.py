@@ -107,9 +107,11 @@ def distance_to_bins(graph, point, bins, max_snap=30):
 
     Suitable for small pilots. No eligible nearby bin yields None (unknown), never proof of absence.
     """
+    if not bins:
+        return None
     graph = normalize_graph(graph.copy())
     edges = list(graph.edges(keys=True, data=True))
-    if not edges or not bins:
+    if not edges:
         return None
     target = min(edges, key=lambda e: e[3]["geometry"].distance(point))
     u, v, k, d = target
